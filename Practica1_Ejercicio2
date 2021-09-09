@@ -1,0 +1,115 @@
+.data # Data declaration section
+	ingrese_numero: .asciiz "Ingrese el numero de iteraciones: "
+	numero_mayor: .asciiz "El numero mayor es: "
+	numero_menor: .asciiz "\nEl numero menor es: "
+    suma: .asciiz "\nLa suma es :"
+    promedio: .asciiz "\nEl promedio es :"
+	
+	
+.text # Assembly language instructions
+main: # Start of code section	
+	
+	li $t1,0 # index
+	li $t2,0 # iteration number
+	li $t3,0 # max
+	li $t4,0 # min
+    li $t5,0 #sum
+    
+	
+	# show text "ingrese numero"
+	li $v0, 4 				
+	la $a0, ingrese_numero 		
+	syscall 			
+	
+	# read iteration number
+	li $v0,5
+	syscall
+	
+	# t2 alamcena el numero de iteraciones
+	move $t2,$v0 
+	
+	# read first number only
+	# read
+	li $v0,5
+	syscall
+	
+	# el primer numero ingresado sera el max y min inicialmente
+	move $t3,$v0
+	move $t4,$v0
+	
+	add $t1,$t1,1   # incrementamos el contador
+	
+	Loop:
+        add $t5,$t5,$v0
+		beq $t2,$t1, Exit
+		
+		# read
+		li $v0,5
+		syscall
+		
+		
+		bgt $v0, $t3, Them1
+			j EndIf1
+		Them1:
+			move $t3, $v0
+		EndIf1:
+		
+		bgt $t4, $v0, Them2
+			j EndIf2
+		Them2:
+			move $t4, $v0
+		EndIf2:
+		
+		add $t1,$t1,1  
+			
+		
+		j Loop
+	Exit:		
+	 #La suma 
+    li $v0, 4 				
+	la $a0, suma		
+	syscall
+
+    move $a0, $t5
+    li $v0,1
+    syscall
+
+    #Promedio
+
+    li $v0, 4 				
+	la $a0, promedio	
+	syscall	
+
+   
+    mtc1 $t5,$f9
+	cvt.s.w $f9,$f9
+
+    mtc1 $t2,$f8
+    cvt.s.w $f8,$f8
+
+    div.s $f12,$f9,$f8
+    li $v0,2
+    syscall
+
+	# El numero mayor
+	li $v0, 4 				
+	la $a0, numero_mayor 		
+	syscall 
+	
+	move $a0, $t3
+	li $v0, 1 
+	syscall
+	
+	# El numero menor
+	li $v0, 4 				
+	la $a0, numero_menor 		
+	syscall 
+	
+	move $a0, $t4
+	li $v0, 1 
+	syscall
+   
+		
+	
+		
+	jr $ra
