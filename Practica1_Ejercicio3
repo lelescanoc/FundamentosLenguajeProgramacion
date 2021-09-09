@@ -1,0 +1,54 @@
+.data # Data declaration section
+primero: .asciiz "\n Ingrese el primer lado del triangulo"
+segundo: .asciiz "\n Ingrese el segundo lado del triangulo"
+tercero: .asciiz "\n Ingrese el tercer lado del triangulo"
+text_1: .asciiz "\n Es Triangulo valido"
+
+.text # Assembly language instructions
+	main: # Start of code section
+    
+    li $v0, 4 				
+	la $a0, primero	
+	syscall
+    li      $v0, 5  
+	syscall
+	move $a1,$v0
+
+    li $v0, 4 				
+	la $a0, segundo
+	syscall
+    li      $v0, 5 
+	syscall
+	move $a2,$v0
+
+    li $v0, 4 				
+	la $a0, tercero
+	syscall
+	li      $v0, 5 
+	syscall
+	move $a3,$v0
+	
+#suma 01
+	add  $t0, $a2, $a3
+#suma 02
+	add $t1, $a1, $a3
+#suma 03
+	add $t2, $a2, $a3
+	
+	bge $a1,$t0,label_1
+
+	label_2:
+		la $a0, text_1
+		bge $a2,$t1,end_label
+		#la $a0, text_3
+		b end_label
+
+	label_1:
+		la $a0, text_1
+		bge $a1,$a3,end_label
+		#la $a0, text_3
+		b end_label
+	
+	end_label:
+		li $v0,4
+		syscall 
