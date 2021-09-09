@@ -1,0 +1,84 @@
+.data # Data declaration section
+	text01: .asciiz "Ingrese un numero:  "
+    text02: .asciiz "Ingrese otro numero:  "
+    suma: .asciiz "La suma es:   "
+    resta: .asciiz "\nLa diferncia es:  "
+    multi: .asciiz "\nLa multipliacion es:  "
+    divi: .asciiz "\nLa division es:  "
+    promedio: .asciiz "\nEl promedio es:  "
+    dos: .float 2.0
+		
+.text # Assembly language instructions
+main: # Start of code section	
+	
+	la $a0, text01
+    li $v0,4
+    syscall
+    li $v0, 6
+    syscall
+    mov.s $f1, $f0
+      
+
+    la $a0, text02
+    li $v0,4
+    syscall
+    li $v0, 6
+    syscall
+    mov.s $f2, $f0
+      
+    la $a0, suma  # Suma 
+    li $v0,4
+    syscall
+
+    add.s $f12, $f1, $f2
+    cvt.w.s $f12,$f12
+    mfc1 $t0,$f12
+    move $a0,$t0
+    li $v0,1   
+    syscall # fIN SUMA
+
+    la $a0, resta #rESTA
+    li $v0,4
+    syscall
+
+    sub.s $f12, $f1, $f2 
+	
+    cvt.w.s $f12,$f12
+    mfc1 $t0,$f12
+    move $a0,$t0
+    li $v0,1   
+    syscall # fIN RESTA
+
+    la $a0, multi #Multiplicacion
+    li $v0,4
+    syscall
+
+    mul.s $f12,$f1, $f2
+    
+	cvt.w.s $f12,$f12
+    mfc1 $t0,$f12
+
+    move $a0,$t0
+    li $v0,1   
+    syscall# fIN multiplicacion
+
+    la $a0, divi #Division
+    li $v0,4
+    syscall
+    
+    div.s $f12,$f1,$f2
+    li $v0,2   
+    syscall # fIN division
+
+    la $a0, promedio #Promedio
+    li $v0,4
+    syscall
+
+    add.s $f5,$f1,$f2
+    lwc1 $f6,dos
+    div.s $f12,$f5,$f6
+    li $v0,2
+    syscall
+
+
+	jr $ra
